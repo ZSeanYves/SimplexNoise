@@ -1,0 +1,8 @@
+{
+  "is-main": false,
+  "import": [
+    {
+      "path": "Luna-Flow/linear-algebra"
+    }
+  ]
+}
