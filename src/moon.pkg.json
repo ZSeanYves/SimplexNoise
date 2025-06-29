@@ -2,7 +2,24 @@
   "is-main": false,
   "import": [
     {
-      "path": "Luna-Flow/linear-algebra"
+      "path": "Luna-Flow/linear-algebra",
+      "alias": "la"
+    },
+
+    {
+      "path": "gmlewis/image",
+      "alias": "image"
+    },
+
+    {
+      "path": "gmlewis/image/png",
+      "alias": "png"
+    },
+
+    {
+      "path": "gmlewis/io",
+      "alias": "io"
     }
+
   ]
 }
