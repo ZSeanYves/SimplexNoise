@@ -44,3 +44,7 @@ fn generate_fbm_png_buffer(width: Int, height: Int, scale: Float, seed: Int, oct
   buf.to_bytes()
 }
 
+// 实际存盘逻辑 
+fn save_png(path: Bytes, png_data: Bytes) -> Bool {
+
+}

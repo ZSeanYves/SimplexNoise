@@ -1,7 +1,7 @@
 // octaves: 八度数，决定叠加层数
 // persistence: 振幅衰减因子
 // lacunarity: 频率增长因子
-fn fbm2d(p: Array[Float], octaves: Int, persistence: Float, lacunarity: Float, perm_table: Array[Int], grads: Array[Array[Float]]) -> Float {
+pub fn fbm2d(p: Array[Float], octaves: Int, persistence: Float, lacunarity: Float, perm_table: Array[Int], grads: Array[Array[Float]]) -> Float {
   let mut total = 0.0
   let mut frequency = 1.0
   let mut amplitude = 1.0
