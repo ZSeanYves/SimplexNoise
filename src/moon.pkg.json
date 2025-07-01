@@ -2,11 +2,6 @@
   "is-main": false,
   "import": [
     {
-      "path": "Luna-Flow/linear-algebra",
-      "alias": "la"
-    },
-
-    {
       "path": "gmlewis/image",
       "alias": "image"
     },
@@ -17,9 +12,17 @@
     },
 
     {
+      "path": "gmlewis/image/color",
+      "alias": "color"
+    },
+
+    {
       "path": "gmlewis/io",
       "alias": "io"
-    }
+    },
 
+    {
+      "path": "Kaida-Amethyst/math"
+    }
   ]
 }
