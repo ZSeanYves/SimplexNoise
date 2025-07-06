@@ -10,6 +10,6 @@
   "repository": "https://github.com/ZSeanYves/SimplexNoise.git",
   "license": "Apache-2.0",
   "keywords": [],
-  "description": "",
+  "description": "实现基础的 Simplex Noise 算法",
   "source": "src"
 }

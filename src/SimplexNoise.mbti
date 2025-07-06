@@ -1,0 +1,31 @@
+package "ZseanYves/SimplexNoise"
+
+// Values
+fn create_simplex_noise(Int) -> (Array[Int], Array[Array[Float]])
+
+fn fbm2d(Array[Float], Int, Float, Float, Array[Int], Array[Array[Float]]) -> Float
+
+fn generate_and_save_fbm_image(String, Int, Int, Int, Array[Array[Float]], NoiseConfig) -> Bool raise
+
+fn generate_and_save_noise_image(String, Int, Int, Float, Int, Array[Array[Float]]) -> Bool raise
+
+let grads : Array[Array[Float]]
+
+fn new_NoiseConfig(Int, Float, Float, Float) -> NoiseConfig
+
+fn noise2d(Array[Float], Array[Int], Array[Array[Float]]) -> Float
+
+fn simplex2d_debug(Array[Float], Array[Int], Array[Array[Float]]) -> Array[Float]
+
+// Types and methods
+pub struct NoiseConfig {
+  octaves : Int
+  persistence : Float
+  lacunarity : Float
+  scale : Float
+}
+
+// Type aliases
+
+// Traits
+

@@ -7,7 +7,7 @@ pub struct NoiseConfig {
 }
 
 // 预定义 8 个 2D 单位向量作为梯度集合
-pub let grads: Array[Array[Float]] = [
+let grads: Array[Array[Float]] = [
   [1.0, 0.0],
   [-1.0, 0.0],
   [0.0, 1.0],
