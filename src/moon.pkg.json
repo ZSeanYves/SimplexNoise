@@ -23,6 +23,11 @@
 
     {
       "path": "Kaida-Amethyst/math"
+    },
+
+    {
+      "path": "moonbitlang/x/fs",
+      "alias": "fs"
     }
 
   ]

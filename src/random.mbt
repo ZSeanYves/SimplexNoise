@@ -5,7 +5,7 @@ fn random_int(seed: Int) -> Int {
 
 // 自定义洗牌，基于 seed 控制随机性
 fn shuffle(arr: Array[Int], seed: Int) -> Array[Int] {
-  let result = arr
+  let result = [..arr]  // 深拷贝
   let mut s = seed
   let n = result.length()
 
@@ -22,6 +22,7 @@ fn shuffle(arr: Array[Int], seed: Int) -> Array[Int] {
   }
   result
 }
+
 
 fn make_range(start: Int, end: Int) -> Array[Int] {
   if start > end {

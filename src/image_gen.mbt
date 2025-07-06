@@ -21,6 +21,8 @@ fn generate_noise_png_buffer(width: Int, height: Int, scale: Float, seed: Int, g
   buf.to_bytes()
 }
 
+
+
 // 生成 2D fBm 噪声，输出 PNG 二进制数据
 fn generate_fbm_png_buffer(width: Int, height: Int, scale: Float, seed: Int, octaves: Int, persistence: Float, lacunarity: Float, grads: Array[Array[Float]]) -> Bytes raise @image.SizeError {
   let buf = @io.Buffer::new(size_hint=1024)
@@ -43,8 +45,12 @@ fn generate_fbm_png_buffer(width: Int, height: Int, scale: Float, seed: Int, oct
   ignore(@png.encode(buf, img))
   buf.to_bytes()
 }
-
-// 实际存盘逻辑 
-fn save_png(path: Bytes, png_data: Bytes) -> Bool {
-
+fn save_png(path: String, png_data: Bytes) -> Bool raise @fs.IOError {
+  match (try? @fs.write_bytes_to_file(path, png_data)) {
+    Ok(_) => true
+    Err(e) => {
+      raise e
+      false
+    }
+  }
 }
