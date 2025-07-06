@@ -12,6 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Update MoonBit registry
+        run: moon update
+
       - name: Setup Moonbit
         uses: hustcer/setup-moonbit@v1
 
