@@ -12,9 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add Moonbit to PATH
-        run: echo "$HOME/.moon/bin" >> $GITHUB_PATH
-
       - name: Update MoonBit registry
         run: moon update
 
