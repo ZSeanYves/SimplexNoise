@@ -1,16 +1,29 @@
 test "Basic Simplex Noise Image" {
-  let (_, grads) = create_simplex_noise(42)
+  let (_, grads) = @ZSeanYves/SimplexNoise.create_simplex_noise(42)
   //父目录写法按系统自行调整，这里及下面默认按windows路径
-  let ok = generate_and_save_noise_image("./src/examples/basic_noise.png", 256, 256, 0.05, 42, grads)
+  let ok = @ZSeanYves/SimplexNoise.generate_and_save_noise_image("./src/examples/gray/basic_noise.png", 256, 256, 0.05, 42, grads)
   assert_eq(ok,true)
 }
 
 
 test "fBm Noise Image (Cloud/Heightmap)" {
+  let config = @ZSeanYves/SimplexNoise.new_NoiseConfig(5, 0.5, 2.0, 0.03)
+  let (_, grads) = create_simplex_noise(123)
+  let ok = @ZSeanYves/SimplexNoise.generate_and_save_fbm_image("./src/examples/gray/fbm_noise.png", 256, 256, 123, grads, config)
+  assert_eq(ok,true)
+}
+
+test "Basic Simplex Noise Image (Color)" {
+  let (_, grads) = create_simplex_noise(42)
+  let ok = @ZSeanYves/SimplexNoise.generate_and_save_noise_image_color("./src/examples/color/basic_noise_color.png", 256, 256, 0.05, 42, grads)
+  assert_eq(ok, true)
+}
+
+test "fBm Noise Image (Color)" {
   let config = new_NoiseConfig(5, 0.5, 2.0, 0.03)
   let (_, grads) = create_simplex_noise(123)
-  let ok = generate_and_save_fbm_image("./src/examples/fbm_noise.png", 256, 256, 123, grads, config)
-  assert_eq(ok,true)
+  let ok = @ZSeanYves/SimplexNoise.generate_and_save_fbm_image_color("./src/examples/color/fbm_noise_color.png", 256, 256, 123, grads, config)
+  assert_eq(ok, true)
 }
 
 
@@ -39,8 +52,7 @@ test "2D Simplex Noise Output Range" {
 
 test "Single Vertex Contribution Debug" {
   let (perm, _) = create_simplex_noise(1)
-  let c = simplex2d_debug([0.1, 0.1], perm, grads)
-
+  let c = @ZSeanYves/SimplexNoise.simplex2d_debug([0.1, 0.1], perm, grads)
 
   // 可根据观察值补充 assert
   assert_eq(c[0] >= -1.0 && c[0] <= 1.0,true)

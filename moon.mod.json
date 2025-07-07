@@ -1,5 +1,5 @@
 {
-  "name": "ZseanYves/SimplexNoise",
+  "name": "ZSeanYves/SimplexNoise",
   "version": "0.1.0",
   "deps": {
     "gmlewis/image": "0.16.16",

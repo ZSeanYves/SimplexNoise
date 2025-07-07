@@ -7,7 +7,7 @@ pub struct NoiseConfig {
 }
 
 // 预定义 8 个 2D 单位向量作为梯度集合
-let grads: Array[Array[Float]] = [
+pub let grads: Array[Array[Float]] = [
   [1.0, 0.0],
   [-1.0, 0.0],
   [0.0, 1.0],
@@ -42,27 +42,70 @@ pub fn noise2d(p: Array[Float], perm_table: Array[Int], grads: Array[Array[Float
 
 // 生成并保存 Simplex 噪声 PNG 图像
 pub fn generate_and_save_noise_image(
-  path: String,
-  width: Int,
-  height: Int,
-  scale: Float,
-  seed: Int,
-  grads: Array[Array[Float]]
-) -> Bool raise Error  {
+  path : String,
+  width : Int,
+  height : Int,
+  scale : Float,
+  seed : Int,
+  grads : Array[Array[Float]]
+) -> Bool raise Error {
   let png_data = generate_noise_png_buffer(width, height, scale, seed, grads)
   save_png(path, png_data)
 }
 
 // 生成并保存 fBm 噪声 PNG 图像，允许自定义八度配置
 pub fn generate_and_save_fbm_image(
-  path: String,
-  width: Int,
-  height: Int,
-  seed: Int,
-  grads: Array[Array[Float]],
-  config: NoiseConfig
+  path : String,
+  width : Int,
+  height : Int,
+  seed : Int,
+  grads : Array[Array[Float]],
+  config : NoiseConfig
 ) -> Bool raise Error {
-  let png_data = generate_fbm_png_buffer(width, height, config.scale, seed,config.octaves, config.persistence, config.lacunarity, grads)
+  let png_data = generate_fbm_png_buffer(
+    width,   height,
+    config.scale,
+    seed,
+    config.octaves,
+    config.persistence,
+    config.lacunarity,
+    grads,
+  )
+  save_png(path, png_data)
+}
+
+// 生成并保存彩色 Simplex 噪声 PNG 图像
+pub fn generate_and_save_noise_image_color(
+  path : String,
+  width : Int,
+  height : Int,
+  scale : Float,
+  seed : Int,
+  grads : Array[Array[Float]]
+) -> Bool raise Error {
+  let png_data = generate_noise_png_buffer_color(width, height, scale, seed, grads)
+  save_png(path, png_data)
+}
+
+// 生成并保存彩色 fBm 噪声 PNG 图像，允许自定义八度配置
+pub fn generate_and_save_fbm_image_color(
+  path : String,
+  width : Int,
+  height : Int,
+  seed : Int,
+  grads : Array[Array[Float]],
+  config : NoiseConfig
+) -> Bool raise Error {
+  let png_data = generate_fbm_png_buffer_color(
+    width,
+    height,
+    config.scale,
+    seed,
+    config.octaves,
+    config.persistence,
+    config.lacunarity,
+    grads
+  )
   save_png(path, png_data)
 }
 

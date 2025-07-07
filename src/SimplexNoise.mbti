@@ -7,9 +7,11 @@ fn fbm2d(Array[Float], Int, Float, Float, Array[Int], Array[Array[Float]]) -> Fl
 
 fn generate_and_save_fbm_image(String, Int, Int, Int, Array[Array[Float]], NoiseConfig) -> Bool raise
 
+fn generate_and_save_fbm_image_color(String, Int, Int, Int, Array[Array[Float]], NoiseConfig) -> Bool raise
+
 fn generate_and_save_noise_image(String, Int, Int, Float, Int, Array[Array[Float]]) -> Bool raise
 
-let grads : Array[Array[Float]]
+fn generate_and_save_noise_image_color(String, Int, Int, Float, Int, Array[Array[Float]]) -> Bool raise
 
 fn new_NoiseConfig(Int, Float, Float, Float) -> NoiseConfig
 
