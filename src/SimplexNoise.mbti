@@ -9,6 +9,10 @@ fn fbm2d(Array[Float], Int, Float, Float, Array[Int], Array[Array[Float]]) -> Fl
 
 fn fbm3d(Array[Float], Int, Float, Float, Array[Int], Array[Array[Float]]) -> Float
 
+fn generate_3d_slices(String, Int, Int, Float, Int, Array[Array[Float]], Int) -> Unit raise
+
+fn generate_3d_slices_color(String, Int, Int, Float, Int, Array[Array[Float]], Int) -> Unit raise
+
 fn generate_and_save_fbm3d_image(String, Int, Int, Float, Int, Array[Array[Float]], NoiseConfig) -> Bool raise
 
 fn generate_and_save_fbm3d_image_color(String, Int, Int, Float, Int, Array[Array[Float]], NoiseConfig) -> Bool raise
@@ -24,6 +28,10 @@ fn generate_and_save_noise3d_image_color(String, Int, Int, Float, Float, Int, Ar
 fn generate_and_save_noise_image(String, Int, Int, Float, Int, Array[Array[Float]]) -> Bool raise
 
 fn generate_and_save_noise_image_color(String, Int, Int, Float, Int, Array[Array[Float]]) -> Bool raise
+
+fn generate_fbm3d_slices(String, Int, Int, Int, Array[Array[Float]], NoiseConfig, Int) -> Unit raise
+
+fn generate_fbm3d_slices_color(String, Int, Int, Int, Array[Array[Float]], NoiseConfig, Int) -> Unit raise
 
 let grads : Array[Array[Float]]
 
