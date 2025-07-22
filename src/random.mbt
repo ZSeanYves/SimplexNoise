@@ -37,6 +37,5 @@ fn make_range(start: Int, end: Int) -> Array[Int] {
 fn init_permutation(seed: Int) -> Array[Int] {
   let base = make_range(0, 255)
   let shuffled = shuffle(base, seed)
-  // 直接返回洗牌后的数组作为置换表
   shuffled
 }

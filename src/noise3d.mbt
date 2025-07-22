@@ -4,22 +4,27 @@ fn hash3d(ix: Int, iy: Int, iz: Int, perm_table: Array[Int], grads: Array[Array[
 }
 
 fn simplex3d(
-  p : Array[Float],
-  perm_table : Array[Int],
-  grads : Array[Array[Float]]
+  p: Array[Float], 
+  perm_table: Array[Int], 
+  grads: Array[Array[Float]], 
+  scale: Float 
 ) -> Float {
   let f3 = 1.0 / 3.0
   let g3 = 1.0 / 6.0
 
-  let s = (p[0] + p[1] + p[2]).to_double() * f3
-  let i = @math.floor(p[0].to_double() + s).to_int()
-  let j = @math.floor(p[1].to_double() + s).to_int()
-  let k = @math.floor(p[2].to_double() + s).to_int()
+  let nx = p[0] * scale
+  let ny = p[1] * scale
+  let nz = p[2] * scale
+
+  let s = (nx + ny + nz).to_double() * f3
+  let i = @math.floor(nx.to_double() + s).to_int()
+  let j = @math.floor(ny.to_double() + s).to_int()
+  let k = @math.floor(nz.to_double() + s).to_int()
 
   let t = (i.to_float() + j.to_float() + k.to_float()) * g3.to_float()
-  let x0 = p[0] - (i.to_float() - t)
-  let y0 = p[1] - (j.to_float() - t)
-  let z0 = p[2] - (k.to_float() - t)
+  let x0 = nx - (i.to_float() - t)
+  let y0 = ny - (j.to_float() - t)
+  let z0 = nz - (k.to_float() - t)
 
   let mut ijk1 = [0, 0, 0]
   let mut ijk2 = [0, 0, 0]
@@ -94,5 +99,6 @@ fn simplex3d(
     n3 = t3_2 * t3_2 * (gi3[0] * x3 + gi3[1] * y3 + gi3[2] * z3).to_double()
   }
 
-  32.0 * (n0 + n1 + n2 + n3).to_float()
+  32.0 * (n0 + n1 + n2 + n3).to_float() 
 }
+
