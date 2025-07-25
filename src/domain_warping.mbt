@@ -113,17 +113,16 @@ fn warp3d(
 
 
 fn warp_fbm3d(
-  grads: Array[Array[Float]], 
-  p: Array[Float], 
-  seed: Int, 
-  scale: Float, 
-  strength: Float, 
-  octaves: Int, 
-  persistence: Float, 
-  lacunarity: Float
+  grads : Array[Array[Float]],
+  p : Array[Float],
+  seed : Int,
+  scale : Float,
+  strength : Float,
+  octaves : Int,
+  persistence : Float,
+  lacunarity : Float
 ) -> Float {
   let perm = init_noise(seed)
-
   let warp_x = fbm3d(
     [p[0], p[1], p[2]],
     octaves,
@@ -131,7 +130,7 @@ fn warp_fbm3d(
     lacunarity,
     perm,
     grads,
-    scale
+    scale,
   )
   let warp_y = fbm3d(
     [p[0] + 19.19, p[1] + 29.29, p[2] + 37.37],
@@ -140,7 +139,7 @@ fn warp_fbm3d(
     lacunarity,
     perm,
     grads,
-    scale
+    scale,
   )
   let warp_z = fbm3d(
     [p[0] + 41.41, p[1] + 53.53, p[2] + 67.67],
@@ -149,17 +148,17 @@ fn warp_fbm3d(
     lacunarity,
     perm,
     grads,
-    scale
+    scale,
   )
-
   let warped = [
     p[0] + warp_x * strength,
     p[1] + warp_y * strength,
     p[2] + warp_z * strength,
   ]
-
-  fbm3d(warped, octaves, persistence, lacunarity, perm, grads, scale)
+  fbm3d(warped, octaves, persistence, lacunarity, perm, grads, 1)
 }
+
+
 //
 //
 //

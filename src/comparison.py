@@ -86,12 +86,12 @@ def generate_noise4d_fbm(size=256, z=0.3, w=0.6, octaves=5, persistence=0.5, lac
 
 def main():
     path_map = {
-        "1": "./src/examples/gray/basic/noise2d.png",
-        "2": "./src/examples/gray/fbm/noise2d.png",
-        "3": "./src/examples/gray/basic/noise3d.png",
-        "4": "./src/examples/gray/fbm/noise3d.png",
-        "5": "./src/examples/gray/basic/noise4d.png",
-        "6": "./src/examples/gray/fbm/noise4d.png",
+        "1": "./src/examples/comparison/snoise2d_moonbit.png",
+        "2": "./src/examples/comparison/fbm2d_moonbit.png",
+        "3": "./src/examples/comparison/snoise3d_moonbit.png",
+        "4": "./src/examples/comparison/fbm3d_moonbit.png",
+        "5": "./src/examples/comparison/snoise4d_moonbit.png",
+        "6": "./src/examples/comparison/fbm4d_moonbit.png",
     }
 
     print("请输入要比对的类型：")

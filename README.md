@@ -1,22 +1,24 @@
-# 🎨 SimplexNoise: 2D / 3D Simplex Noise & fBm Library for MoonBit
+# 🎨 SimplexNoise: 2D / 3D / 4D Procedural Noise & fBm Library for MoonBit
 
 [English](https://github.com/ZSeanYves/SimplexNoise/blob/main/README.md) | [简体中文](https://github.com/ZSeanYves/SimplexNoise/blob/main/README_zh_CN.md)
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/ZSeanYves/SimplexNoise/simplex_noise_ci.yml)](https://github.com/ZSeanYves/SimplexNoise/actions)
 [![License](https://img.shields.io/github/license/ZSeanYves/SimplexNoise)](LICENSE)
 
-**SimplexNoise** is a lightweight MoonBit noise library supporting 2D, 3D, and 4D Simplex noise, multi-octave fractal Brownian motion (fBm) noise, grayscale and color image output. It is suitable for terrain generation, clouds, procedural textures, volumetric noise visualization, and educational use.
+**SimplexNoise** is a lightweight, modular MoonBit library supporting high-performance 2D / 3D / 4D Simplex noise and multi-octave fractal Brownian motion (fBm). It features domain warping, tileable output, grayscale and color PNG rendering, and batch slicing. Suitable for procedural terrain, texture generation, cloud rendering, simulation, and research.
 
 ---
 
 ## 🚀 Features
 
-* ✅ 2D, 3D, and 4D Simplex Noise with seed control
-* ✅ Multi-Octave fBm Noise (octaves, persistence, lacunarity, scale)
-* ✅ Grayscale & Color PNG Image Output
-* ✅ 3D/4D Single Slice and Batch Slice Support
-* ✅ Configurable Color Mapping
-* ✅ Clean, Modular & Extensible MoonBit Design
+* ✅ 2D / 3D / 4D Simplex Noise with seed & gradient control
+* ✅ Multi-octave fractal Brownian motion (fBm)
+* ✅ Domain Warping support (`strength~`)
+* ✅ Tileable noise and fBm via periodic mapping (`pi~`)
+* ✅ PNG image output: grayscale & RGB
+* ✅ Batch slice output for 3D / 4D volumes
+* ✅ Python-style gradient compatibility
+* ✅ Full test suite including value ranges, comparisons, slice validation
 
 ---
 
@@ -34,85 +36,71 @@ Or manually in `moon.mod.json`:
 
 ---
 
-## 🎨 Basic Usage Examples
+## 🧑‍💻 Basic Usage
 
-### 2D Grayscale Noise Image
+### 2D Color fBm with Domain Warping
 
 ```moonbit
-let (_, grads) = @ZSeanYves/SimplexNoise.create_simplex_noise(42)
-@ZSeanYves/SimplexNoise.generate_and_save_noise_image("./noise.png", 256, 256, 0.05, 42, grads)
+let config = @ZSeanYves/SimplexNoise.new_NoiseConfig(6, 0.5, 2.0, 0.03)
+let (_, grads) = @ZSeanYves/SimplexNoise.create2d(42)
+@ZSeanYves/SimplexNoise.fbm2d_image("./fbm2d.png", 256, 256, 42, grads, config, true, false, strength~ = 2.5)
 ```
 
-### 2D Color fBm Noise Image
+### Tileable 3D Grayscale fBm
 
 ```moonbit
-let config = @ZSeanYves/SimplexNoise.new_NoiseConfig(5, 0.5, 2.0, 0.03)
-let (_, grads) = @ZSeanYves/SimplexNoise.create_simplex_noise(123)
-@ZSeanYves/SimplexNoise.generate_and_save_fbm_image_color("./fbm_color.png", 256, 256, 123, grads, config)
+let config = new_NoiseConfig(5, 0.5, 2.0, 0.03)
+let (_, grads) = create3d(99)
+@ZSeanYves/SimplexNoise.tfbm3d_image("./tile3d.png", 256, 256, 64, 99, 0.0, grads, config, pi~ = 3.14, true)
 ```
 
-### 3D Noise Slice Image
+### 4D Slice Output (Batch)
 
 ```moonbit
-let (_, grads3d) = @ZSeanYves/SimplexNoise.create_simplex_noise3d(42)
-@ZSeanYves/SimplexNoise.generate_and_save_noise3d_image("./slice.png", 256, 256, 0.05, 0.3, 42, grads3d)
-```
-
-### 4D Noise Slice Image
-
-```moonbit
-let (_, grads4d) = @ZSeanYves/SimplexNoise.create_simplex_noise4d(42)
-@ZSeanYves/SimplexNoise.generate_and_save_noise4d_image("./slice4d.png", 256, 256, 0.05, 0.3, 0.6, 42, grads4d)
+let config = new_NoiseConfig(4, 0.5, 2.0, 0.03)
+let (_, grads) = create4d(123)
+@ZSeanYves/SimplexNoise.fbm4d_slices("./slices", 128, 128, 64, 123, grads, config, false, true, 10)
 ```
 
 ---
 
 ## 📘 API Overview
 
-### 2D Noise
-
-| Function                                | Description                                |
-| --------------------------------------- | ------------------------------------------ |
-| `generate_and_save_noise_image`         | Generate grayscale 2D Simplex noise image  |
-| `generate_and_save_fbm_image`           | Generate grayscale 2D fBm noise image      |
-| `generate_and_save_noise_image_color`   | Generate color 2D Simplex noise image      |
-| `generate_and_save_fbm_image_color`     | Generate color 2D fBm noise image          |
-
-### 3D Noise
-
-| Function                                  | Description                                    |
-| ----------------------------------------- | ---------------------------------------------- |
-| `generate_and_save_noise3d_image`         | Generate grayscale 3D Simplex noise slice      |
-| `generate_and_save_fbm3d_image`           | Generate grayscale 3D fBm noise slice          |
-| `generate_and_save_noise3d_image_color`   | Generate color 3D Simplex noise slice          |
-| `generate_and_save_fbm3d_image_color`     | Generate color 3D fBm noise slice              |
-| `generate_3d_slices`                      | Batch generate grayscale 3D noise slices       |
-| `generate_fbm3d_slices`                   | Batch generate grayscale 3D fBm noise slices   |
-| `generate_3d_slices_color`                | Batch generate color 3D noise slices           |
-| `generate_fbm3d_slices_color`             | Batch generate color 3D fBm noise slices       |
-
-### 4D Noise
-
-| Function                                  | Description                                     |
-| ----------------------------------------- | ----------------------------------------------- |
-| `generate_and_save_noise4d_image`         | Generate grayscale 4D Simplex noise slice       |
-| `generate_and_save_fbm4d_image`           | Generate grayscale 4D fBm noise slice           |
+| Function         | Dim | Type  | Tileable | Warp | Slice | Output |
+| ---------------- | --- | ----- | -------- | ---- | ----- | ------ |
+| `noise2d_image`  | 2D  | basic | ❌        | ✅    | ❌     | PNG    |
+| `fbm2d_image`    | 2D  | fBm   | ❌        | ✅    | ❌     | PNG    |
+| `tnoise2d_image` | 2D  | basic | ✅        | ❌    | ❌     | PNG    |
+| `tfbm2d_image`   | 2D  | fBm   | ✅        | ❌    | ❌     | PNG    |
+| `noise3d_image`  | 3D  | basic | ❌        | ✅    | ❌     | PNG    |
+| `fbm3d_image`    | 3D  | fBm   | ❌        | ✅    | ❌     | PNG    |
+| `tnoise3d_image` | 3D  | basic | ✅        | ❌    | ❌     | PNG    |
+| `tfbm3d_image`   | 3D  | fBm   | ✅        | ❌    | ❌     | PNG    |
+| `noise3d_slices` | 3D  | basic | ❌        | ✅    | ✅     | PNG    |
+| `fbm3d_slices`   | 3D  | fBm   | ❌        | ✅    | ✅     | PNG    |
+| `noise4d_image`  | 4D  | basic | ❌        | ✅    | ❌     | PNG    |
+| `fbm4d_image`    | 4D  | fBm   | ❌        | ✅    | ❌     | PNG    |
+| `tnoise4d_image` | 4D  | basic | ✅        | ❌    | ❌     | PNG    |
+| `tfbm4d_image`   | 4D  | fBm   | ✅        | ❌    | ❌     | PNG    |
+| `noise4d_slices` | 4D  | basic | ❌        | ✅    | ✅     | PNG    |
+| `fbm4d_slices`   | 4D  | fBm   | ❌        | ✅    | ✅     | PNG    |
 
 ---
 
-## 🎛️ Parameter Meaning
+## 🎛️ Parameters
 
-| Parameter       | Description                                                                 |
-|----------------|-----------------------------------------------------------------------------|
-| `width`, `height` | Image dimensions in pixels                                                  |
-| `scale`         | Controls noise frequency. Lower = zoomed out; Higher = more detail         |
-| `z`, `w`        | For 3D/4D noise, fixed slice depth values                                  |
-| `seed`          | Random seed to generate gradient table                                      |
-| `grads`         | Precomputed gradient vectors from seed                                      |
-| `config`        | fBm config object: `NoiseConfig(octaves, persistence, lacunarity, scale)`  |
-| `octaves`       | Number of fBm layers. More = more detail                                    |
-| `persistence`   | Amplitude scaling per octave (commonly ~0.5)                                |
-| `lacunarity`    | Frequency scaling per octave (commonly ~2.0)                               |
+| Parameter         | Description                         |
+| ----------------- | ----------------------------------- |
+| `width`, `height` | Output image size in pixels         |
+| `depth`, `time`   | For 3D/4D tileable output           |
+| `scale`           | Controls frequency of noise         |
+| `seed`            | Determines permutation table        |
+| `grads`           | Gradient vector table               |
+| `z`, `w`          | Slice positions in 3D/4D            |
+| `pi~`             | Controls tileability (default 3.14) |
+| `strength~`       | Warp intensity (default 1.0)        |
+| `useWarp`         | Enable domain warping               |
+| `isGrayScale`     | Use grayscale or RGB                |
 
 ---
 
@@ -121,35 +109,40 @@ let (_, grads4d) = @ZSeanYves/SimplexNoise.create_simplex_noise4d(42)
 ```
 SimplexNoise/
 ├── src/
-│   ├── fbm.mbt                     # 2D fBm noise logic
-│   ├── fbm3d.mbt                   # 3D fBm noise logic
-│   ├── image_gen.mbt               # Image output (2D, 3D, 4D)
-│   ├── noise2d.mbt                 # 2D Simplex noise core
-│   ├── noise3d.mbt                 # 3D Simplex noise core
-│   ├── random.mbt                  # Seed-based permutation & gradient table
-│   ├── simplex_noise.mbt           # Public API wrapper
-│   ├── simplex_noise_tests.mbt     # Unit tests
-│   ├── SimplexNoise.mbti           # Interface and type exports
-│   └── moon.pkg.json               # Package metadata
-├── examples/                       # Example output images
-├── LICENSE
-└── README.md
+│   ├── noise2d.mbt / noise3d.mbt / noise4d.mbt         # Core simplex noise
+│   ├── fbm.mbt / fbm3d.mbt / fbm4d.mbt                 # fBm logic
+│   ├── image_gen.mbt / slice.mbt                       # PNG output & slicing
+│   ├── simplex_noise.mbt / SimplexNoise.mbti           # Public interface
+│   └── simplex_noise_test.mbt                          # Full test suite
+├── examples/                                           # Output images
+├── moon.pkg.json / LICENSE / README.md
 ```
 
 ---
 
-## 🧪 Testing
+## ✅ Testing
 
 ```bash
-moon test -p ZSeanYves/simplexnoise
+moon test -p ZSeanYves/SimplexNoise
 ```
+
+### 🔬 Test Coverage Includes
+
+* ✔️ Noise value range checks (2D/3D/4D)
+* ✔️ fBm vs basic comparison
+* ✔️ Warp & Tileable effects
+* ✔️ Grayscale vs RGB rendering
+* ✔️ Batch slice tests
+* ✔️ Custom gradient support
+* ✔️ Python noise parity (snoise2/3/4, fbm)
+
+Test images are saved under `src/examples/` and grouped into folders by type.
 
 ---
 
-## ⚡ Future Work
+## 🧠 Roadmap
 
-* 🔄 Tileable noise & domain warping extensions
-* ⛏️ Analytic derivatives (normal map generation)
+* 🎨 Normal map / analytic derivative output
 
 ---
 

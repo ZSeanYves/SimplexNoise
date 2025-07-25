@@ -1,13 +1,14 @@
 // 统一配置结构
 pub struct NoiseConfig {
-  octaves: Int
-  persistence: Float
-  lacunarity: Float
-  scale: Float
+  octaves : Int
+  persistence : Float
+  lacunarity : Float
+  scale : Float
 }
 
+
 // 预定义 8 个 2D 单位向量作为梯度集合
-pub let grads2d: Array[Array[Float]] = [
+pub let grads2d : Array[Array[Float]] = [
   [1.0, 0.0],
   [-1.0, 0.0],
   [0.0, 1.0],
@@ -15,40 +16,70 @@ pub let grads2d: Array[Array[Float]] = [
   [0.70710678, 0.70710678],
   [-0.70710678, 0.70710678],
   [0.70710678, -0.70710678],
-  [-0.70710678, -0.70710678]
+  [-0.70710678, -0.70710678],
 ]
 
 // 预定义 12 个 3D 单位向量作为梯度集合
-pub let grads3d: Array[Array[Float]] = [
-  [1.0, 1.0, 0.0], [-1.0, 1.0, 0.0], [1.0, -1.0, 0.0], [-1.0, -1.0, 0.0],
-  [1.0, 0.0, 1.0], [-1.0, 0.0, 1.0], [1.0, 0.0, -1.0], [-1.0, 0.0, -1.0],
-  [0.0, 1.0, 1.0], [0.0, -1.0, 1.0], [0.0, 1.0, -1.0], [0.0, -1.0, -1.0]
+pub let grads3d : Array[Array[Float]] = [
+  [1.0, 1.0, 0.0],
+  [-1.0, 1.0, 0.0],
+  [1.0, -1.0, 0.0],
+  [-1.0, -1.0, 0.0],
+  [1.0, 0.0, 1.0],
+  [-1.0, 0.0, 1.0],
+  [1.0, 0.0, -1.0],
+  [-1.0, 0.0, -1.0],
+  [0.0, 1.0, 1.0],
+  [0.0, -1.0, 1.0],
+  [0.0, 1.0, -1.0],
+  [0.0, -1.0, -1.0],
 ]
 
 // 预定义 32 个 4D 单位向量作为梯度集合
-pub let grads4d: Array[Array[Float]] = [
-  [ 0.0,  1.0,  1.0,  1.0], [ 0.0,  1.0,  1.0, -1.0],
-  [ 0.0,  1.0, -1.0,  1.0], [ 0.0,  1.0, -1.0, -1.0],
-  [ 0.0, -1.0,  1.0,  1.0], [ 0.0, -1.0,  1.0, -1.0],
-  [ 0.0, -1.0, -1.0,  1.0], [ 0.0, -1.0, -1.0, -1.0],
-  [ 1.0,  0.0,  1.0,  1.0], [ 1.0,  0.0,  1.0, -1.0],
-  [ 1.0,  0.0, -1.0,  1.0], [ 1.0,  0.0, -1.0, -1.0],
-  [-1.0,  0.0,  1.0,  1.0], [-1.0,  0.0,  1.0, -1.0],
-  [-1.0,  0.0, -1.0,  1.0], [-1.0,  0.0, -1.0, -1.0],
-  [ 1.0,  1.0,  0.0,  1.0], [ 1.0,  1.0,  0.0, -1.0],
-  [ 1.0, -1.0,  0.0,  1.0], [ 1.0, -1.0,  0.0, -1.0],
-  [-1.0,  1.0,  0.0,  1.0], [-1.0,  1.0,  0.0, -1.0],
-  [-1.0, -1.0,  0.0,  1.0], [-1.0, -1.0,  0.0, -1.0],
-  [ 1.0,  1.0,  1.0,  0.0], [ 1.0,  1.0, -1.0,  0.0],
-  [ 1.0, -1.0,  1.0,  0.0], [ 1.0, -1.0, -1.0,  0.0],
-  [-1.0,  1.0,  1.0,  0.0], [-1.0,  1.0, -1.0,  0.0],
-  [-1.0, -1.0,  1.0,  0.0], [-1.0, -1.0, -1.0,  0.0]
+pub let grads4d : Array[Array[Float]] = [
+  [0.0, 1.0, 1.0, 1.0],
+  [0.0, 1.0, 1.0, -1.0],
+  [0.0, 1.0, -1.0, 1.0],
+  [0.0, 1.0, -1.0, -1.0],
+  [0.0, -1.0, 1.0, 1.0],
+  [0.0, -1.0, 1.0, -1.0],
+  [0.0, -1.0, -1.0, 1.0],
+  [0.0, -1.0, -1.0, -1.0],
+  [1.0, 0.0, 1.0, 1.0],
+  [1.0, 0.0, 1.0, -1.0],
+  [1.0, 0.0, -1.0, 1.0],
+  [1.0, 0.0, -1.0, -1.0],
+  [-1.0, 0.0, 1.0, 1.0],
+  [-1.0, 0.0, 1.0, -1.0],
+  [-1.0, 0.0, -1.0, 1.0],
+  [-1.0, 0.0, -1.0, -1.0],
+  [1.0, 1.0, 0.0, 1.0],
+  [1.0, 1.0, 0.0, -1.0],
+  [1.0, -1.0, 0.0, 1.0],
+  [1.0, -1.0, 0.0, -1.0],
+  [-1.0, 1.0, 0.0, 1.0],
+  [-1.0, 1.0, 0.0, -1.0],
+  [-1.0, -1.0, 0.0, 1.0],
+  [-1.0, -1.0, 0.0, -1.0],
+  [1.0, 1.0, 1.0, 0.0],
+  [1.0, 1.0, -1.0, 0.0],
+  [1.0, -1.0, 1.0, 0.0],
+  [1.0, -1.0, -1.0, 0.0],
+  [-1.0, 1.0, 1.0, 0.0],
+  [-1.0, 1.0, -1.0, 0.0],
+  [-1.0, -1.0, 1.0, 0.0],
+  [-1.0, -1.0, -1.0, 0.0],
 ]
 
 
 
-pub fn new_NoiseConfig(octaves: Int, persistence: Float, lacunarity: Float, scale: Float) -> NoiseConfig {
-  let config:NoiseConfig = {octaves, persistence, lacunarity, scale}
+pub fn new_NoiseConfig(
+  octaves : Int,
+  persistence : Float,
+  lacunarity : Float,
+  scale : Float
+) -> NoiseConfig {
+  let config : NoiseConfig = { octaves, persistence, lacunarity, scale }
   config
 }
 
@@ -84,19 +115,12 @@ pub fn noise2d_image(
   scale : Float,
   seed : Int,
   grads : Array[Array[Float]],
-  useWarp : Bool,  
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_noise_png_buffer(
-    width,
-    height,
-    scale,
-    seed,
-    grads,
-    useWarp,
-    isGrayScale,
-    strength
+    width, height, scale, seed, grads, useWarp, isGrayScale, strength,
   )
   save_png(path, png_data)
 }
@@ -109,9 +133,9 @@ pub fn fbm2d_image(
   seed : Int,
   grads : Array[Array[Float]],
   config : NoiseConfig,
-  useWarp : Bool,  
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_fbm_png_buffer(
     width,
@@ -124,7 +148,39 @@ pub fn fbm2d_image(
     grads,
     useWarp,
     isGrayScale,
-    strength
+    strength,
+  )
+  save_png(path, png_data)
+}
+
+pub fn tnoise2d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  scale : Float,
+  seed : Int,
+  grads : Array[Array[Float]],
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_noise2d_image(
+    width, height, scale, seed, grads, pi, isGrayScale,
+  )
+  save_png(path, png_data)
+}
+
+pub fn tfbm2d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  seed : Int,
+  grads : Array[Array[Float]],
+  config : NoiseConfig,
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_fbm2d_image(
+    width, height, config, seed, grads, pi, isGrayScale,
   )
   save_png(path, png_data)
 }
@@ -158,20 +214,12 @@ pub fn noise3d_image(
   z : Float,
   seed : Int,
   grads : Array[Array[Float]],
-  useWarp : Bool, 
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_noise3d_png_buffer(
-    width,
-    height,
-    scale,
-    z,
-    seed,
-    grads,
-    useWarp,
-    isGrayScale,
-    strength
+    width, height, scale, z, seed, grads, useWarp, isGrayScale, strength,
   )
   save_png(path, png_data)
 }
@@ -184,9 +232,9 @@ pub fn fbm3d_image(
   seed : Int,
   grads : Array[Array[Float]],
   config : NoiseConfig,
-  useWarp : Bool, 
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_fbm3d_png_buffer(
     width,
@@ -200,7 +248,43 @@ pub fn fbm3d_image(
     grads,
     useWarp,
     isGrayScale,
-    strength
+    strength,
+  )
+  save_png(path, png_data)
+}
+
+pub fn tnoise3d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  depth : Int,
+  scale : Float,
+  seed : Int,
+  z : Float,
+  grads : Array[Array[Float]],
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_noise3d_image(
+    width, height, depth, z, scale, seed, grads, pi, isGrayScale,
+  )
+  save_png(path, png_data)
+}
+
+pub fn tfbm3d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  depth : Int,
+  seed : Int,
+  z : Float,
+  grads : Array[Array[Float]],
+  config : NoiseConfig,
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_fbm3d_image(
+    width, height, depth, z, config, seed, grads, pi, isGrayScale,
   )
   save_png(path, png_data)
 }
@@ -235,21 +319,12 @@ pub fn noise4d_image(
   w : Float,
   seed : Int,
   grads : Array[Array[Float]],
-  useWarp : Bool, 
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_noise4d_png_buffer(
-    width,
-    height,
-    scale,
-    z,
-    w,
-    seed,
-    grads,
-    useWarp,
-    isGrayScale,
-    strength
+    width, height, scale, z, w, seed, grads, useWarp, isGrayScale, strength,
   )
   save_png(path, png_data)
 }
@@ -265,9 +340,9 @@ pub fn fbm4d_image(
   seed : Int,
   grads : Array[Array[Float]],
   config : NoiseConfig,
-  useWarp : Bool, 
-  isGrayScale : Bool, 
-  strength : Float 
+  useWarp : Bool,
+  isGrayScale : Bool,
+  strength~ : Float = 1.0
 ) -> Bool raise Error {
   let png_data = generate_fbm4d_png_buffer(
     width,
@@ -282,8 +357,47 @@ pub fn fbm4d_image(
     grads,
     useWarp,
     isGrayScale,
-    strength
+    strength,
   )
   save_png(path, png_data)
 }
 
+pub fn tnoise4d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  depth : Int,
+  time : Int,
+  z : Float,
+  w : Float,
+  seed : Int,
+  grads : Array[Array[Float]],
+  scale : Float,
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_noise4d_image(
+    width, height, depth, time, z, w, seed, scale, grads, pi, isGrayScale,
+  )
+  save_png(path, png_data)
+}
+
+pub fn tfbm4d_image(
+  path : String,
+  width : Int,
+  height : Int,
+  depth : Int,
+  time : Int,
+  z : Float,
+  w : Float,
+  seed : Int,
+  grads : Array[Array[Float]],
+  config : NoiseConfig,
+  pi~ : Double = 3.14159265358979323846,
+  isGrayScale : Bool
+) -> Bool raise Error {
+  let png_data = generate_tileable_fbm4d_image(
+    width, height, depth, time, z, w, seed, config, grads, pi, isGrayScale,
+  )
+  save_png(path, png_data)
+}

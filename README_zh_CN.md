@@ -1,32 +1,34 @@
-# 🎨 SimplexNoise：MoonBit 的 2D / 3D / 4D Simplex 噪声与 fBm 噪声库
+# 🎨 SimplexNoise：MoonBit 的 2D / 3D / 4D 程序噪声与 fBm 噪声库
 
 [English](https://github.com/ZSeanYves/SimplexNoise/blob/main/README.md) | [简体中文](https://github.com/ZSeanYves/SimplexNoise/blob/main/README_zh_CN.md)
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/ZSeanYves/SimplexNoise/simplex_noise_ci.yml)](https://github.com/ZSeanYves/SimplexNoise/actions)
-[![License](https://img.shields.io/github/license/ZSeanYves/SimplexNoise)](LICENSE)
+[![构建状态](https://img.shields.io/github/actions/workflow/status/ZSeanYves/SimplexNoise/simplex_noise_ci.yml)](https://github.com/ZSeanYves/SimplexNoise/actions)
+[![许可证](https://img.shields.io/github/license/ZSeanYves/SimplexNoise)](LICENSE)
 
-**SimplexNoise** 是一个轻量级 MoonBit 噪声生成库，支持 2D / 3D / 4D Simplex 噪声，多谋段 fBm (fractal Brownian motion) 扩展，可生成灰度图和颜色图应用于地形、云图、终端纹理、动态纹理模拟等场景。
-
----
-
-## 🚀 功能特性
-
-* 支持 **2D / 3D / 4D Simplex 噪声**，可设置种子
-* **fBm 多层噪声**，支持谋段数，持续系数和间隔系数
-* 输出 **灰度 / 颜色 PNG 图像**
-* 支持 **3D / 4D 切片生成和批量生成**
-* 可自定义 **颜色映射规则**
-* 以 MoonBit 编程为根基，清晰且易于扩展
+**SimplexNoise** 是一个轻量、模块化的 MoonBit 库，支持高性能的 2D / 3D / 4D Simplex 噪声和多八度的 fBm（分形布朗运动）噪声。功能包括域扰动（Domain Warping）、可平铺图像生成、灰度/彩色 PNG 渲染、切片输出等，适用于程序化地形、纹理、云图、模拟可视化与科研。
 
 ---
 
-## 📦 安装
+## 🚀 特性概览
+
+* ✅ 基于种子与梯度的 2D / 3D / 4D Simplex 噪声生成
+* ✅ 多八度 fBm 噪声（可调参数）
+* ✅ 支持扰动效果（`strength~` 控制强度）
+* ✅ 可平铺 Tileable 噪声与 fBm（`pi~` 控制周期）
+* ✅ 支持灰度与彩色 PNG 输出
+* ✅ 批量切片输出（3D / 4D）
+* ✅ 与 Python 标准库兼容的梯度向量
+* ✅ 完善测试用例，涵盖取值范围、平滑性、Python 对比等
+
+---
+
+## 📦 安装方式
 
 ```bash
 moon add ZSeanYves/SimplexNoise
 ```
 
-或手动添加到 `moon.mod.json`文件：
+或手动在 `moon.mod.json` 中添加：
 
 ```json
 "import": ["ZSeanYves/SimplexNoise"]
@@ -34,103 +36,114 @@ moon add ZSeanYves/SimplexNoise
 
 ---
 
-## 🎨 基础示例
+## 🧪 使用示例
 
-### 生成2D 灰度噪声图
+### 2D 彩色 fBm + 扰动
 
 ```moonbit
-let (_, grads) = @ZSeanYves/SimplexNoise.create_simplex_noise(42)
-@ZSeanYves/SimplexNoise.generate_and_save_noise_image("./noise.png", 256, 256, 0.05, 42, grads)
+let config = @ZSeanYves/SimplexNoise.new_NoiseConfig(6, 0.5, 2.0, 0.03)
+let (_, grads) = @ZSeanYves/SimplexNoise.create2d(42)
+@ZSeanYves/SimplexNoise.fbm2d_image("./fbm2d.png", 256, 256, 42, grads, config, true, false, strength~ = 2.5)
 ```
 
-### 生成2D fBm 颜色噪声图
+### 3D 可平铺 fBm（灰度）
 
 ```moonbit
-let config = @ZSeanYves/SimplexNoise.new_NoiseConfig(5, 0.5, 2.0, 0.03)
-let (_, grads) = @ZSeanYves/SimplexNoise.create_simplex_noise(123)
-@ZSeanYves/SimplexNoise.generate_and_save_fbm_image_color("./fbm_color.png", 256, 256, 123, grads, config)
+let config = new_NoiseConfig(5, 0.5, 2.0, 0.03)
+let (_, grads) = create3d(99)
+@ZSeanYves/SimplexNoise.tfbm3d_image("./tile3d.png", 256, 256, 64, 99, 0.0, grads, config, pi~ = 3.14, true)
 ```
 
-### 生成3D 切片灰度图
+### 4D 切片输出
 
 ```moonbit
-let (_, grads3d) = @ZSeanYves/SimplexNoise.create_simplex_noise3d(42)
-@ZSeanYves/SimplexNoise.generate_and_save_noise3d_image("./slice.png", 256, 256, 0.05, 0.3, 42, grads3d)
-```
-
-### 批量生成3D 切片
-
-```moonbit
-@ZSeanYves/SimplexNoise.generate_3d_slices("./slices", 128, 128, 0.05, 42, grads3d, 20)
+let config = new_NoiseConfig(4, 0.5, 2.0, 0.03)
+let (_, grads) = create4d(123)
+@ZSeanYves/SimplexNoise.fbm4d_slices("./slices", 128, 128, 64, 123, grads, config, false, true, 10)
 ```
 
 ---
 
-## 📘 公共 API 介绍
+## 📘 核心接口概览
 
-### 2D 噪声生成
-
-| 函数                                    | 描述                  |
-| ------------------------------------- | ------------------- |
-| `generate_and_save_noise_image`       | 生成2D 灰度 Simplex 噪声图 |
-| `generate_and_save_fbm_image`         | 生成2D fBm 灰度噪声图      |
-| `generate_and_save_noise_image_color` | 生成2D 颜色 Simplex 噪声图 |
-| `generate_and_save_fbm_image_color`   | 生成2D 颜色 fBm 噪声图     |
-
-### 3D / 4D 切片生成
-
-| 函数                                | 描述             |
-| --------------------------------- | -------------- |
-| `generate_and_save_noise3d_image` | 生成3D 灰度切片图     |
-| `generate_and_save_fbm3d_image`   | 生成3D fBm 灰度切片图 |
-| `generate_and_save_noise4d_image` | 生成4D 灰度切片图     |
-| `generate_and_save_fbm4d_image`   | 生成4D fBm 灰度切片图 |
-| `generate_3d_slices`              | 批量生成3D 灰度切片    |
-| `generate_fbm3d_slices`           | 批量生成3D fBm 切片  |
-
----
-
-## ⚙️ 参数含义
-
-| 参数                | 类型              | 含义                         |
-| ----------------- | --------------- | -------------------------- |
-| `width`, `height` | `Int`           | 图像的宽高                      |
-| `scale`           | `Float`         | 噪声线程纯应用的频率系数               |
-| `z`, `w`          | `Float`         | 3D/4D 切片位置                 |
-| `seed`            | `Int`           | 随机种子，控制结果不同                |
-| `grads`           | `Array[Vector]` | 描述噪声向量表                    |
-| `config`          | `NoiseConfig`   | fBm 配置，包括 octaves/持续/间隔/频率 |
+| 函数名              | 维度 | 类型  | 可平铺 | 扰动 | 切片 | 输出  |
+| ---------------- | -- | --- | --- | -- | -- | --- |
+| `noise2d_image`  | 2D | 基础  | ❌   | ✅  | ❌  | PNG |
+| `fbm2d_image`    | 2D | fBm | ❌   | ✅  | ❌  | PNG |
+| `tnoise2d_image` | 2D | 基础  | ✅   | ❌  | ❌  | PNG |
+| `tfbm2d_image`   | 2D | fBm | ✅   | ❌  | ❌  | PNG |
+| `noise3d_image`  | 3D | 基础  | ❌   | ✅  | ❌  | PNG |
+| `fbm3d_image`    | 3D | fBm | ❌   | ✅  | ❌  | PNG |
+| `tnoise3d_image` | 3D | 基础  | ✅   | ❌  | ❌  | PNG |
+| `tfbm3d_image`   | 3D | fBm | ✅   | ❌  | ❌  | PNG |
+| `noise3d_slices` | 3D | 基础  | ❌   | ✅  | ✅  | PNG |
+| `fbm3d_slices`   | 3D | fBm | ❌   | ✅  | ✅  | PNG |
+| `noise4d_image`  | 4D | 基础  | ❌   | ✅  | ❌  | PNG |
+| `fbm4d_image`    | 4D | fBm | ❌   | ✅  | ❌  | PNG |
+| `tnoise4d_image` | 4D | 基础  | ✅   | ❌  | ❌  | PNG |
+| `tfbm4d_image`   | 4D | fBm | ✅   | ❌  | ❌  | PNG |
+| `noise4d_slices` | 4D | 基础  | ❌   | ✅  | ✅  | PNG |
+| `fbm4d_slices`   | 4D | fBm | ❌   | ✅  | ✅  | PNG |
 
 ---
 
-## 📂 项目目录
+## 🎛️ 参数说明
+
+| 参数名             | 含义描述                          |
+| --------------- | ----------------------------- |
+| `width, height` | 图像尺寸（像素）                      |
+| `depth, time`   | 平铺 3D / 4D 输出所需维度             |
+| `scale`         | 控制频率（越小越平滑）                   |
+| `seed`          | 种子值（用于生成置换表）                  |
+| `grads`         | 梯度向量（预定义 / 自定义）               |
+| `z, w`          | 3D / 4D 切片位置                  |
+| `pi~`           | 周期性参数，控制平铺边界（默认 3.14）         |
+| `strength~`     | 扰动强度，开启 `useWarp` 后生效（默认 1.0） |
+| `isGrayScale`   | 是否输出灰度图（否则为 RGB 彩色）           |
+
+---
+
+## 📂 项目结构
 
 ```
 SimplexNoise/
 ├── src/
-│   ├── noise2d.mbt                # 2D Simplex 噪声核心
-│   ├── noise3d.mbt                # 3D Simplex 噪声
-│   ├── fbm.mbt                    # 2D fBm 扩展
-│   ├── fbm3d.mbt                  # 3D fBm 扩展
-│   ├── image_gen.mbt             # 灰度 / 颜色图输出
-│   ├── simplex_noise.mbt         # 公共 API 封装
-│   ├── SimplexNoise.mbti         # 导入接口声明
-│   └── simplex_noise_tests.mbt   # 单元测试
-├── examples/                     # 示例图像输出
-├── README.md
-├── README_zh_CN.md
-└── LICENSE
+│   ├── noise2d.mbt / noise3d.mbt / noise4d.mbt     # Simplex 核心逻辑
+│   ├── fbm.mbt / fbm3d.mbt / fbm4d.mbt             # fBm 递归模块
+│   ├── image_gen.mbt / slice.mbt                   # 图像渲染与批量切片
+│   ├── simplex_noise.mbt / SimplexNoise.mbti       # 接口导出
+│   └── simplex_noise_test.mbt                      # 测试用例模块
+├── examples/                                       # 输出样图
+├── moon.pkg.json / LICENSE / README.md
 ```
 
 ---
 
-## 🔮 未来计划
+## ✅ 测试说明
 
-* 可重复噪声
-* 基于分析导数生成 normal map
+执行测试命令：
+
+```bash
+moon test -p ZSeanYves/SimplexNoise
+```
+
+### ☑️ 覆盖内容
+
+* 📷 图像输出测试（Basic / fBm / Warp / Tileable / Color / Gray）
+* 📈 数值正确性（值域范围、平滑性、梯度归一）
+* 🔁 Python 标准库对比（snoise2/3/4, fbm）
+* 🧪 批量切片（3D / 4D）
+
+测试图像统一输出至 `src/examples/` 子目录中，便于可视化检查与对比验证。
 
 ---
 
-## 📌 协议
+## 📌 未来计划
 
-本项目采用 MIT License 协议。详见 [LICENSE](./LICENSE)。
+* 🎨 输出法线图 / 高光图（解析导数）
+
+---
+
+## 📜 开源协议
+
+本项目采用 MIT License 许可，详见 [LICENSE](./LICENSE)。

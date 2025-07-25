@@ -71,7 +71,7 @@ fn simplex2d(
   }
 
   // 缩放到 [-1, 1] 范围
-  20.0 * (n0 + n1 + n2).to_float()
+  20 * (n0 + n1 + n2).to_float()
 }
 
 
