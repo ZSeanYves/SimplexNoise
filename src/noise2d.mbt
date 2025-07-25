@@ -1,22 +1,3 @@
-// 初始化置换表，基于种子打乱
-fn init_noise(seed: Int) -> Array[Int] {
-  let perm_table = init_permutation(seed)
-  
-  //重复一遍 0..255 填充，构建最终长度 512 的置换表
-  let result = [..perm_table, ..perm_table]
-  result
-}
-fn hash(
-  ix : Int,
-  iy : Int,
-  perm_table : Array[Int],
-  grads : Array[Array[Float]]
-) -> Array[Float] {
-  let idx = perm_table[(perm_table[ix & 255] + iy) & 255] % grads.length()
-  grads[idx]
-}
-
-
 // 2D Simplex Noise 核心函数
 fn simplex2d(
   p : Array[Float], 
@@ -61,13 +42,13 @@ fn simplex2d(
   let t1 = 0.5 - (x1 * x1 + y1 * y1).to_double()
   if t1 >= 0.0 {
     let t1_2 = t1 * t1
-    n1 = t1_2 * t1_2 * (gi1[0] * x0 + gi1[1] * y0).to_double()
+    n1 = t1_2 * t1_2 * (gi1[0] * x1 + gi1[1] * y1).to_double()
   }
 
   let t2 = 0.5 - (x2 * x2 + y2 * y2).to_double()
   if t2 >= 0.0 {
     let t2_2 = t2 * t2
-    n2 = t2_2 * t2_2 * (gi2[0] * x0 + gi2[1] * y0).to_double()
+    n2 = t2_2 * t2_2 * (gi2[0] * x2 + gi2[1] * y2).to_double()
   }
 
   // 缩放到 [-1, 1] 范围

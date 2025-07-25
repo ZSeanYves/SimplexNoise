@@ -84,7 +84,6 @@ pub fn new_NoiseConfig(
 }
 
 
-
 // 2D Simplex 噪声核心算法
 // 初始化置换表和梯度表,允许自定义种子
 pub fn create2d(seed : Int) -> (Array[Int], Array[Array[Float]]) {

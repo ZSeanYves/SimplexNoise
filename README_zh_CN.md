@@ -112,6 +112,7 @@ SimplexNoise/
 │   ├── fbm.mbt / fbm3d.mbt / fbm4d.mbt             # fBm 递归模块
 │   ├── image_gen.mbt / slice.mbt                   # 图像渲染与批量切片
 │   ├── simplex_noise.mbt / SimplexNoise.mbti       # 接口导出
+│   ├── hash.mbt                                    # 构建哈希表
 │   └── simplex_noise_test.mbt                      # 测试用例模块
 ├── examples/                                       # 输出样图
 ├── moon.pkg.json / LICENSE / README.md

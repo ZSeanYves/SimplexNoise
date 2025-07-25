@@ -1,36 +1,36 @@
-/// 使用一个噪声函数扭曲另一个噪声函数的输入坐标（质数偏移）
+fn clamp(x: Float, min: Float, max: Float) -> Float {
+  if x < min { min }
+  else if x > max { max }
+  else { x }
+}
+let maxwarp : Ref[Float] = { val: 2.0 }
+
+pub fn new_maxwarp(a : Float) -> Float {
+  if a < 0 {
+    return maxwarp.val
+  }
+  maxwarp.val = a
+  maxwarp.val
+}
 fn warp2d(
   grads : Array[Array[Float]],
   p : Array[Float],
   seed : Int,
-  scale : Float, // 扰动噪声频率
-  strength : Float // 扰动强度
+  scale : Float,
+  strength : Float
 ) -> Float {
-  // 初始化噪声的排列
   let perm = init_noise(seed)
-
-  // 使用两个独立的扭曲向量
-  // 使用质数偏移来避免 warp_x 和 warp_y 之间的干扰
   let warp_x = simplex2d([p[0], p[1]], perm, grads, scale)
-  let warp_y = simplex2d(
-    [
-      p[0] + 19.19, // 质数偏移1
-      p[1] + 29.29, // 质数偏移2
-    ], 
-    perm,
-    grads,
-    scale,
-  )
+  let warp_y = simplex2d([p[0] + 19.19, p[1] + 29.29], perm, grads, scale)
+  let limit = maxwarp.val
   let warped = [
-
-    // 计算扭曲后的坐标
-    p[0] + warp_x * strength,
-    p[1] + warp_y * strength,
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
   ]
-
-  // 返回最终的噪声值
+  maxwarp.val = 2.0 // 重置为默认值
   simplex2d(warped, perm, grads, 1)
 }
+
 
 
 fn warp_fbm2d(
@@ -62,7 +62,12 @@ fn warp_fbm2d(
     grads,
     scale,
   )
-  let warped = [p[0] + warp_x * strength, p[1] + warp_y * strength]
+  let limit = maxwarp.val
+  let warped = [
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
+  ]
+  maxwarp.val = 2.0
   fbm2d(warped, octaves, persistence, lacunarity, perm, grads, 1)
 }
 //
@@ -75,41 +80,36 @@ fn warp_fbm2d(
 //
 //3D
 fn warp3d(
-  grads: Array[Array[Float]], 
-  p: Array[Float], 
-  seed: Int, 
-  scale: Float, 
-  strength: Float
+  grads : Array[Array[Float]],
+  p : Array[Float],
+  seed : Int,
+  scale : Float,
+  strength : Float
 ) -> Float {
   let perm = init_noise(seed)
-
-  let warp_x = simplex3d(
-    [p[0], p[1], p[2]],
-    perm,
-    grads,
-    scale
-  )
+  let warp_x = simplex3d([p[0], p[1], p[2]], perm, grads, scale)
   let warp_y = simplex3d(
     [p[0] + 19.19, p[1] + 29.29, p[2] + 37.37],
     perm,
     grads,
-    scale
+    scale,
   )
   let warp_z = simplex3d(
     [p[0] + 41.41, p[1] + 53.53, p[2] + 67.67],
     perm,
     grads,
-    scale
+    scale,
   )
-
+  let limit = maxwarp.val
   let warped = [
-    p[0] + warp_x * strength,
-    p[1] + warp_y * strength,
-    p[2] + warp_z * strength,
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
+    clamp(p[2] + warp_z * strength, p[2] - limit, p[2] + limit),
   ]
-
+  maxwarp.val = 2.0
   simplex3d(warped, perm, grads, 1)
 }
+
 
 
 fn warp_fbm3d(
@@ -150,15 +150,15 @@ fn warp_fbm3d(
     grads,
     scale,
   )
+  let limit = maxwarp.val
   let warped = [
-    p[0] + warp_x * strength,
-    p[1] + warp_y * strength,
-    p[2] + warp_z * strength,
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
+    clamp(p[2] + warp_z * strength, p[2] - limit, p[2] + limit),
   ]
+  maxwarp.val = 2.0
   fbm3d(warped, octaves, persistence, lacunarity, perm, grads, 1)
 }
-
-
 //
 //
 //
@@ -195,14 +195,17 @@ fn warp4d(
     grads,
     scale,
   )
+  let limit = maxwarp.val
   let warped = [
-    p[0] + warp_x * strength,
-    p[1] + warp_y * strength,
-    p[2] + warp_z * strength,
-    p[3] + warp_w * strength,
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
+    clamp(p[2] + warp_z * strength, p[2] - limit, p[2] + limit),
+    clamp(p[3] + warp_w * strength, p[3] - limit, p[3] + limit),
   ]
+  maxwarp.val = 2.0
   simplex4d(warped, perm, grads, 1)
 }
+
 
 fn warp_fbm4d(
   grads : Array[Array[Float]],
@@ -251,12 +254,15 @@ fn warp_fbm4d(
     grads,
     scale,
   )
+  let limit = maxwarp.val
   let warped = [
-    p[0] + warp_x * strength,
-    p[1] + warp_y * strength,
-    p[2] + warp_z * strength,
-    p[3] + warp_w * strength,
+    clamp(p[0] + warp_x * strength, p[0] - limit, p[0] + limit),
+    clamp(p[1] + warp_y * strength, p[1] - limit, p[1] + limit),
+    clamp(p[2] + warp_z * strength, p[2] - limit, p[2] + limit),
+    clamp(p[3] + warp_w * strength, p[3] - limit, p[3] + limit),
   ]
+  maxwarp.val = 2.0
   fbm4d(warped, octaves, persistence, lacunarity, perm, grads, 1)
 }
+
 

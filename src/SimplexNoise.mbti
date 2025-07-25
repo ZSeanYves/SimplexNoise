@@ -31,6 +31,8 @@ let grads4d : Array[Array[Float]]
 
 fn new_NoiseConfig(Int, Float, Float, Float) -> NoiseConfig
 
+fn new_maxwarp(Float) -> Float
+
 fn noise2d(Array[Float], Array[Int], Array[Array[Float]], Float) -> Float
 
 fn noise2d_image(String, Int, Int, Float, Int, Array[Array[Float]], Bool, Bool, strength~ : Float = ..) -> Bool raise

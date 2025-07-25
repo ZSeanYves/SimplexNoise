@@ -113,6 +113,7 @@ SimplexNoise/
 │   ├── fbm.mbt / fbm3d.mbt / fbm4d.mbt                 # fBm logic
 │   ├── image_gen.mbt / slice.mbt                       # PNG output & slicing
 │   ├── simplex_noise.mbt / SimplexNoise.mbti           # Public interface
+│   ├── hash.mbt                                        # build hash
 │   └── simplex_noise_test.mbt                          # Full test suite
 ├── examples/                                           # Output images
 ├── moon.pkg.json / LICENSE / README.md

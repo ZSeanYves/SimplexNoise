@@ -1,22 +1,3 @@
-fn hash4d(
-  ix : Int,
-  iy : Int,
-  iz : Int,
-  iw : Int,
-  perm_table : Array[Int],
-  grads : Array[Array[Float]]
-) -> Array[Float] {
-  let idx = perm_table[
-    (perm_table[
-      (perm_table[
-        (perm_table[ix & 255] + iy) & 255
-      ] + iz) & 255
-    ] + iw) & 255
-  ] % grads.length()
-  grads[idx]
-}
-
-
 fn simplex4d(
   p: Array[Float],
   perm_table: Array[Int],
