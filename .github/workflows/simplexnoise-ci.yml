@@ -1,27 +1,37 @@
-name: SimplexNoise CI
+name: moonbit-ci
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: install module dependencies
+      - name: Setup MoonBit
+        uses: hustcer/setup-moonbit@v1
+
+      - name: Install dependencies
         run: |
           moon update
           moon install
 
-      - name: Setup Moonbit
-        uses: hustcer/setup-moonbit@v1
+      - name: Check code (deny warnings)
+        run: moon check --deny-warn
 
-      - name: Run tests with coverage
-        run: moon test --enable-coverage
+      - name: Run tests
+        run: moon test --target native
+
+      - name: Format check
+        run: |
+          moon fmt
+          git diff --exit-code
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
