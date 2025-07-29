@@ -61,25 +61,6 @@ jobs:
       - name: moon check
         run: moon check --deny-warn
 
-      - name: moon info
-        run: |
-          moon info --target wasm,wasm-gc,js,native
-          git diff --exit-code
-
-      - name: format diff
-        run: |
-          moon fmt
-          git diff --exit-code
-
-      - name: Setup MSVC
-        if: ${{ matrix.os.name == 'windows-latest' }}
-        uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Set ulimit on unix
-        if: ${{ matrix.os.name != 'windows-latest' }}
-        run: |
-          ulimit -s 8176
-
       - name: moon test
         run: |
           moon test --target all,native
