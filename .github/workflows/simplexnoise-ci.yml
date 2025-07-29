@@ -9,12 +9,32 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-      - name: Setup Moonbit
-        uses: hustcer/setup-moonbit@v1
+      - name: moon version
+        run: |
+          moon version --all
 
+      - name: install module dependencies
+        run: |
+          moon update
+          moon install
+
+      - name: moon check
+        run: moon check --deny-warn
+
+      - name: moon info
+        run: |
+          moon info --target wasm,wasm-gc,js,native
+          git diff --exit-code
+
+      - name: format diff
+        run: |
+          moon fmt
+          git diff --exit-code
+          
       - name: Run tests with coverage
         run: moon test --enable-coverage
 
