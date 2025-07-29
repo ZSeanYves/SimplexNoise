@@ -13,10 +13,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: moon version
-        run: |
-          moon version --all
-
       - name: install module dependencies
         run: |
           moon update
@@ -34,7 +30,7 @@ jobs:
         run: |
           moon fmt
           git diff --exit-code
-          
+
       - name: Run tests with coverage
         run: moon test --enable-coverage
 
